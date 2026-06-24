@@ -16,5 +16,6 @@
   background-repeat: repeat;
   background-size: 150px; 
   opacity: 0.05; /* La marca de agua sutil */
+  filter: brightness(0.6);
   z-index: -1; /* Lo manda al fondo */
 }
