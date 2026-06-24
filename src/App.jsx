@@ -19,8 +19,12 @@ export default function App() {
   } = useHeladeria();
 
   const calcularTotal = () => {
-    return carrito.reduce((acc, item) => acc + (item.precio * (item.cantidad || 1)), 0);
-  };
+  console.log("Estado actual del carrito:", carrito); // <--- ESTO ES LA CLAVE
+  return carrito.reduce((acc, item) => {
+    console.log(`Sumando precio de ${item.nombre}:`, item.precio); // Verificamos cada precio
+    return acc + (item.precio * (item.cantidad || 1));
+  }, 0);
+};
 
   // =========================================================================
   // 1. POTES
