@@ -1,4 +1,5 @@
 import { useHeladeria } from './hooks/useHeladeria';
+import React, { useMemo } from 'react';
 import bannerVitrina from './assets/vitrina-principal-1.jpeg';
 import fotoPotesReal from './assets/potes-helado.jpeg';
 
@@ -15,21 +16,15 @@ export default function App() {
     metodoEntrega, setMetodoEntrega,
     zona, setZona,
     calle, setCalle,
-    total 
   } = useHeladeria();
 
-  const calcularTotal = () => {
-  console.log("--- CARRITO ACTUAL PARA CALCULAR ---", carrito);
-  
-  return carrito.reduce((acc, item) => {
-    const precio = parseFloat(item.precio) || 0;
-    const cantidad = parseInt(item.cantidad) || 1;
-    
-    console.log(`Producto: ${item.nombre} | Precio: ${precio} | Cantidad: ${cantidad}`);
-    
-    return acc + (precio * cantidad);
-  }, 0);
-};
+  const totalCalculado = useMemo(() => {
+    return carrito.reduce((acc, item) => {
+      const precio = parseFloat(item.precio) || 0;
+      const cantidad = parseInt(item.cantidad) || 1;
+      return acc + (precio * cantidad);
+    }, 0);
+  }, [carrito]);
   // =========================================================================
   // 1. POTES
   // =========================================================================
@@ -662,7 +657,7 @@ const agregarPoteAlCarrito = () => {
 
               <div className="flex justify-between items-center pt-4 border-t-2 border-dashed border-gray-300 px-2">
                 <span className="text-sm font-black uppercase tracking-wider text-[#4a5a50]">Total Final:</span>
-                <span className="text-2xl font-black text-[#b88645] drop-shadow-sm">${calcularTotal()}</span>
+                <span className="text-2xl font-black text-[#b88645] drop-shadow-sm">${totalCalculado}</span>
               </div>
               
               <button onClick={enviarPedidoWhatsApp} className="w-full bg-[#3b4c41] text-white border border-[#b88645]/50 font-black text-sm tracking-widest uppercase p-5 rounded-2xl shadow-xl hover:bg-[#2d3a31] hover:border-[#b88645] transition-all duration-300 flex justify-center items-center gap-2 cursor-pointer shadow-black/20 scale-[1.01]">
