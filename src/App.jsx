@@ -657,7 +657,9 @@ const agregarPoteAlCarrito = () => {
 
               <div className="flex justify-between items-center pt-4 border-t-2 border-dashed border-gray-300 px-2">
                 <span className="text-sm font-black uppercase tracking-wider text-[#4a5a50]">Total Final:</span>
-                <span className="text-2xl font-black text-[#b88645] drop-shadow-sm">${totalCalculado}</span>
+                <span className="text-2xl font-black text-[#b88645] drop-shadow-sm">
+  ${totalCalculado} (Items: {carrito.length})
+</span>
               </div>
               
               <button onClick={enviarPedidoWhatsApp} className="w-full bg-[#3b4c41] text-white border border-[#b88645]/50 font-black text-sm tracking-widest uppercase p-5 rounded-2xl shadow-xl hover:bg-[#2d3a31] hover:border-[#b88645] transition-all duration-300 flex justify-center items-center gap-2 cursor-pointer shadow-black/20 scale-[1.01]">
