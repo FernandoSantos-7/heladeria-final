@@ -190,40 +190,42 @@ export default function App() {
       }
     }
   }
-
- const agregarPoteAlCarrito = () => {
+const agregarPoteAlCarrito = () => {
   if (!poteSeleccionado || gustosSeleccionados.length === 0) return;
 
   // =======================================================
-  // LÓGICA ESPECIAL PARA PROMOS (Requiere 2 pasos)
+  // 1. LÓGICA ESPECIAL PARA PROMOS (Requiere 2 pasos)
   // =======================================================
   if (poteSeleccionado.id.includes('promo')) {
     if (!esSegundaPartePromo) {
       // PASO 1: Guardamos los gustos y frenamos la ejecución acá.
-      // ¡NO mandamos nada al carrito todavía!
       setPromoTemporal(gustosSeleccionados);
       setEsSegundaPartePromo(true);
       setGustosSeleccionados([]);
       setCategoriaGustoAbierta(null);
       alert("¡Perfecto! Ahora elegí los gustos para tu segundo pote de la promo.");
-      return; 
+      return;
     } else {
       // PASO 2: Unimos los gustos del Paso 1 con los actuales
       const gustosCompletos = [...promoTemporal, "--- 2do Pote ---", ...gustosSeleccionados];
-      
+
+      // CAPTURAMOS LOS VALORES ANTES DE SETEAR EL ESTADO
+      const nombreGuardar = poteSeleccionado.nombre;
+      const precioGuardar = poteSeleccionado.precio;
+
       setCarrito(prev => {
         const nuevoItem = {
           id: Date.now().toString(),
           tipo: 'Pote',
-          nombre: poteSeleccionado.nombre,
-          precio: poteSeleccionado.precio,
+          nombre: nombreGuardar, 
+          precio: precioGuardar, 
           cantidad: cantidadPote,
           gustos: gustosCompletos
         };
         return [...prev, nuevoItem];
       });
 
-      // Limpiamos la máquina de estados
+      // Limpiamos los estados una sola vez
       setEsSegundaPartePromo(false);
       setPromoTemporal(null);
       setPoteSeleccionado(null);
@@ -236,7 +238,7 @@ export default function App() {
   }
 
   // =======================================================
-  // LÓGICA NORMAL PARA POTES INDIVIDUALES
+  // 2. LÓGICA NORMAL PARA POTES INDIVIDUALES
   // =======================================================
   setCarrito(prev => {
     const gustosStr = [...gustosSeleccionados].sort().join(',');
@@ -247,7 +249,6 @@ export default function App() {
     );
 
     if (indexExistente !== -1) {
-      // Si el pote es exactamente igual, solo sumamos cantidad
       const nuevoCarrito = [...prev];
       nuevoCarrito[indexExistente] = { 
         ...nuevoCarrito[indexExistente], 
@@ -255,7 +256,6 @@ export default function App() {
       };
       return nuevoCarrito;
     } else {
-      // Si es un pote nuevo, lo creamos
       const nuevoItem = { 
         id: Date.now().toString(), 
         tipo: 'Pote', 
