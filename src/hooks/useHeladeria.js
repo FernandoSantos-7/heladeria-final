@@ -14,9 +14,11 @@ export const useHeladeria = () => {
     const [calle, setCalle] = useState('');
 
     const total = useMemo(() => {
-        return carrito.reduce((acumulador, item) => {
-            return acumulador + (item.precio * (item.cantidad || 1));
-        }, 0);
+    return carrito.reduce((acumulador, item) => {
+        const precio = parseFloat(item.precio) || 0;
+        const cantidad = parseInt(item.cantidad) || 1;
+        return acumulador + (precio * cantidad);
+    }, 0);
     }, [carrito]);
 
     return {
