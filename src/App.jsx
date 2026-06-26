@@ -19,10 +19,15 @@ export default function App() {
   } = useHeladeria();
 
   const calcularTotal = () => {
-  console.log("Estado actual del carrito:", carrito); // <--- ESTO ES LA CLAVE
   return carrito.reduce((acc, item) => {
-    console.log(`Sumando precio de ${item.nombre}:`, item.precio); // Verificamos cada precio
-    return acc + (item.precio * (item.cantidad || 1));
+    // 1. Convertimos a número forzoso. Si viene como texto o undefined, lo arregla.
+    const precio = parseFloat(item.precio) || 0; 
+    const cantidad = parseInt(item.cantidad) || 1;
+
+    // 2. Si querés ver en la consola qué está sumando, descomentá la siguiente línea:
+    // console.log(`Sumando ${item.nombre}: $${precio} x ${cantidad}`);
+
+    return acc + (precio * cantidad);
   }, 0);
 };
 
