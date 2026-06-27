@@ -15,11 +15,17 @@ export const useHeladeria = () => {
 
     const total = useMemo(() => {
     return carrito.reduce((acumulador, item) => {
-        const precio = parseFloat(item.precio) || 0;
+        // Obtenemos el valor bruto (probando varios nombres de propiedad)
+        const valorBruto = item.precio || item.price || item.valor || item.costo || 0;
+        
+        // Convertimos a string y quitamos todo lo que NO sea número, punto o guion
+        // Esto elimina signos de pesos, comas, etc.
+        const precioLimpio = parseFloat(valorBruto.toString().replace(/[^0-9.-]+/g, "")) || 0;
+        
         const cantidad = parseInt(item.cantidad) || 1;
-        return acumulador + (precio * cantidad);
+        return acumulador + (precioLimpio * cantidad);
     }, 0);
-    }, [carrito]);
+}, [carrito]);
 
     return {
         poteSeleccionado, setPoteSeleccionado,
