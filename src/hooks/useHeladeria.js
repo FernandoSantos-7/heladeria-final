@@ -15,19 +15,16 @@ export const useHeladeria = () => {
 
    const total = useMemo(() => {
   return carrito.reduce((acumulador, item) => {
-    // 1. Buscamos el precio en varios lugares posibles
-    const precioCrudo = item.precio || 0;
+    // BUSCAMOS EL PRECIO EN CUALQUIER LADO DONDE PUEDA ESTAR ESCONDIDO
+    const precioBruto = item.precio || item.price || item.costo || 0;
     
-    // 2. Convertimos a número de forma segura
-    const precioLimpio = parseFloat(precioCrudo.toString().replace(/[^0-9.-]+/g, "")) || 0;
+    // Convertimos a número quitando TODO lo que no sea dígito o punto
+    const precioLimpio = parseFloat(precioBruto.toString().replace(/[^0-9.]/g, "")) || 0;
     
-    // 3. Calculamos la cantidad (si no existe, es 1)
     const cantidad = parseInt(item.cantidad) || 1;
 
-    // 4. LOG: Si el precio es 0, nos avisa en la consola F12 qué producto es
-    if (precioLimpio === 0) {
-      console.warn("Producto con precio 0 detectado:", item);
-    }
+    // DEBUG: Esto es vital ahora mismo
+    console.log("Calculando item:", item.nombre, "Precio bruto:", precioBruto, "Precio limpio:", precioLimpio);
 
     return acumulador + (precioLimpio * cantidad);
   }, 0);
