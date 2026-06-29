@@ -16,15 +16,9 @@ export default function App() {
     metodoEntrega, setMetodoEntrega,
     zona, setZona,
     calle, setCalle,
+    total,
   } = useHeladeria();
 
-  const totalCalculado = useMemo(() => {
-    return carrito.reduce((acc, item) => {
-      const precio = parseFloat(item.precio) || 0;
-      const cantidad = parseInt(item.cantidad) || 1;
-      return acc + (precio * cantidad);
-    }, 0);
-  }, [carrito]);
   // =========================================================================
   // 1. POTES
   // =========================================================================
@@ -317,7 +311,7 @@ const agregarPoteAlCarrito = () => {
         alert("¡Por favor, seleccioná tu zona e ingresá tu calle y altura!");
         return;
       }
-      if (calcularTotal() < 15000) {
+      if (total < 15000) {
         alert("Para envíos a domicilio el pedido mínimo es de $15.000");
         return;
       }
@@ -341,7 +335,7 @@ const agregarPoteAlCarrito = () => {
                     (metodoEntrega === 'Delivery' ? `*DIRECCIÓN:* ${calle} (${zona})\n\n` : '\n') +
                     `*DETALLE DE COMPRA:*\n${detalleTexto}\n` +
                     `============================\n` +
-                    `*TOTAL ABONADO: $${calcularTotal()}*\n` +
+                    `*TOTAL ABONADO: $${total}*\n` +
                     `============================\n\n` +
                     `*MÉTODO DE PAGO: Mercado Pago / Transferencia*\n` +
                     `_(Te adjunto el comprobante de pago a continuación)_`;
@@ -658,7 +652,7 @@ const agregarPoteAlCarrito = () => {
               <div className="flex justify-between items-center pt-4 border-t-2 border-dashed border-gray-300 px-2">
                 <span className="text-sm font-black uppercase tracking-wider text-[#4a5a50]">Total Final:</span>
                 <span className="text-2xl font-black text-[#b88645] drop-shadow-sm">
-  $${totalCalculado} (Artículos: {carrito.reduce((acc, item) => acc + (parseInt(item.cantidad) || 1), 0)})
+  $${total} (Artículos: {carrito.reduce((acc, item) => acc + (parseInt(item.cantidad) || 1), 0)})
 </span>
               </div>
               
