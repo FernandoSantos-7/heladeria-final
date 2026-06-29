@@ -652,7 +652,8 @@ const agregarPoteAlCarrito = () => {
               <div className="flex justify-between items-center pt-4 border-t-2 border-dashed border-gray-300 px-2">
                 <span className="text-sm font-black uppercase tracking-wider text-[#4a5a50]">Total Final:</span>
                 <span className="text-2xl font-black text-[#b88645] drop-shadow-sm">
-  $${total} (Artículos: {carrito.reduce((acc, item) => acc + (parseInt(item.cantidad) || 1), 0)})
+  // Cambiá la línea 655 por esta:
+{carrito.reduce((acc, item) => acc + (parseFloat(item.precio?.toString().replace(/[^0-9.]/g, "") || 0) * (parseInt(item.cantidad) || 1)), 0)} (Artículos: {carrito.reduce((acc, item) => acc + (parseInt(item.cantidad) || 1), 0)})
 </span>
               </div>
               
