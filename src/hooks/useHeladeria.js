@@ -13,18 +13,24 @@ export const useHeladeria = () => {
     const [zona, setZona] = useState('');
     const [calle, setCalle] = useState('');
 
-    const total = useMemo(() => {
-    return carrito.reduce((acumulador, item) => {
-        // Obtenemos el valor bruto (probando varios nombres de propiedad)
-        const valorBruto = item.precio || item.price || item.valor || item.costo || 0;
-        
-        // Convertimos a string y quitamos todo lo que NO sea número, punto o guion
-        // Esto elimina signos de pesos, comas, etc.
-        const precioLimpio = parseFloat(valorBruto.toString().replace(/[^0-9.-]+/g, "")) || 0;
-        
-        const cantidad = parseInt(item.cantidad) || 1;
-        return acumulador + (precioLimpio * cantidad);
-    }, 0);
+   const total = useMemo(() => {
+  return carrito.reduce((acumulador, item) => {
+    // 1. Buscamos el precio en varios lugares posibles
+    const precioCrudo = item.precio || 0;
+    
+    // 2. Convertimos a número de forma segura
+    const precioLimpio = parseFloat(precioCrudo.toString().replace(/[^0-9.-]+/g, "")) || 0;
+    
+    // 3. Calculamos la cantidad (si no existe, es 1)
+    const cantidad = parseInt(item.cantidad) || 1;
+
+    // 4. LOG: Si el precio es 0, nos avisa en la consola F12 qué producto es
+    if (precioLimpio === 0) {
+      console.warn("Producto con precio 0 detectado:", item);
+    }
+
+    return acumulador + (precioLimpio * cantidad);
+  }, 0);
 }, [carrito]);
 
     return {
